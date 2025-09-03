@@ -25,6 +25,14 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+    elif n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    else:
+        return 0 + num_eights(n // 10)
+    
+        
 
 
 def digit_distance(n):
@@ -47,6 +55,12 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n // 10 == 0:
+        return 0
+    else:
+        i = n % 10
+        j = (n // 10) % 10
+        return abs(i - j) + digit_distance(n // 10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -71,6 +85,15 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(k):
+        if k == n:
+            return odd_func(k)
+        elif k > n:
+            return 0
+        else:
+            return odd_func(k) + even_func(k + 1) + helper(k + 2)
+        
+    return helper(1)
 
 
 def next_smaller_dollar(bill):
@@ -107,6 +130,17 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(bill, x):
+        #helper(bill, x-bill) + helper(next_smaller_dollar(bill), x)
+        if bill == 1:
+            return 1
+        elif bill > x:
+            return helper(next_smaller_dollar(bill), x)
+        else:
+            return helper(bill, x-bill) + helper(next_smaller_dollar(bill), x)
+
+    return helper(100, total)
+
 
 
 def next_larger_dollar(bill):
@@ -143,6 +177,20 @@ def count_dollars_upward(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(bill, x):
+        #helper(bill, x - bill) + helper(next_larger_dollar(bill), x)
+        if bill > x:
+            return 0
+        elif bill == x:
+            return 1
+        elif bill == 100:
+            if x % 100 == 0:
+                return 1
+            else:
+                return 0
+        else:
+            return helper(bill, x-bill) + helper(next_larger_dollar(bill), x)
+    return helper(1, total)
 
 
 def print_move(origin, destination):
@@ -178,6 +226,15 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    mid = 2
+    def helper(n, rod_start, rod_mid, rod_end):
+        if n == 1:
+            print_move(rod_start, rod_end)
+        else:
+            helper(n-1, rod_start, rod_end, rod_mid)
+            print_move(rod_start, rod_end)
+            helper(n-1, rod_mid, rod_start, rod_end)
+    helper(n, start, mid, end)
 
 
 from operator import sub, mul
